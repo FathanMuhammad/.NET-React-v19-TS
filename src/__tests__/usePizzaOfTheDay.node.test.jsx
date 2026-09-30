@@ -16,18 +16,7 @@ const testPizza = {
   sizes: { S: 12.25, M: 16.25, L: 20.25 },
 };
 
-function getPizzaOfTheDay() {
-  let pizza;
 
-  function TestComponent() {
-    pizza = usePizzaOfTheDay();
-    return null;
-  }
-
-  render(<TestComponent />);
-
-  return pizza;
-}
 
 test("to call the API and give back the pizza of the day", async () => {
   fetch.mockResponseOnce(JSON.stringify(testPizza));
