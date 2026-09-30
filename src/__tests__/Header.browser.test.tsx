@@ -6,40 +6,56 @@ import {
   createRouter,
   createRootRoute,
 } from "@tanstack/react-router";
-import { CartContext } from "../contexts";
+import { CartContext, type CartItem } from "../contexts";
+import type { Pizza } from "../APIResponsesTypes";
 
 test("correctly renders a header with a zero cart count", async () => {
   const rootRoute = createRootRoute({
     component: () => (
-      <CartContext.Provider value={[[]]}>
+      <CartContext.Provider value={[[], () => { }]}>
         <Header />
       </CartContext.Provider>
     ),
   });
 
   const router = createRouter({ routeTree: rootRoute });
-  const screen = render(<RouterProvider router={router}></RouterProvider>);
+  const screen = render(<RouterProvider<typeof router> router={router} />);
 
-  const itemsInCart = await screen.getByTestId("cart-number");
+  const itemsInCart = screen.getByTestId("cart-number");
   await expect.element(itemsInCart).toBeInTheDocument();
   await expect.element(itemsInCart).toHaveTextContent("0");
 });
 
 test("correctly renders a header with a three cart count", async () => {
+  // 1. Definisikan objek Pizza yang valid dan lengkap
+  const testPizza: Pizza = {
+    id: "pepperoni",
+    name: "The Pepperoni Pizza",
+    category: "Classic",
+    description: "Mozzarella Cheese, Pepperoni",
+    image: "/public/pizzas/pepperoni.webp",
+    sizes: { S: 9.75, M: 12.5, L: 15.25 },
+  };
+
+  // 2. Buat array CartItem[] yang strukturnya sesuai tipe CartContext
+  const threeItems: CartItem[] = [
+    { pizza: testPizza, size: "S", price: "$9.75" },
+    { pizza: testPizza, size: "M", price: "$12.50" },
+    { pizza: testPizza, size: "L", price: "$15.25" },
+  ];
+
   const rootRoute = createRootRoute({
     component: () => (
-      <CartContext.Provider
-        value={[[{ pizza: 1 }, { pizza: 2 }, { pizza: 3 }]]}
-      >
+      <CartContext.Provider value={[threeItems, () => { }]}>
         <Header />
       </CartContext.Provider>
     ),
   });
 
   const router = createRouter({ routeTree: rootRoute });
-  const screen = render(<RouterProvider router={router}></RouterProvider>);
+  const screen = render(<RouterProvider<typeof router> router={router} />);
 
-  const itemsInCart = await screen.getByTestId("cart-number");
+  const itemsInCart = screen.getByTestId("cart-number");
   await expect.element(itemsInCart).toBeInTheDocument();
   await expect.element(itemsInCart).toHaveTextContent("3");
 });

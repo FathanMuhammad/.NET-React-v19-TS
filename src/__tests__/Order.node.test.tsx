@@ -1,7 +1,7 @@
 import { render, cleanup } from "@testing-library/react";
 import { expect, test, vi, afterEach } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
-import { CartContext } from "../contexts";
+import { CartContext, type CartItem } from "../contexts";
 import { Route } from "../routes/order.lazy";
 
 const fetchMocker = createFetchMock(vi);
@@ -35,13 +35,18 @@ test("renders pizza options and adds a pizza to cart", async () => {
     ])
   );
 
-  const cartState = [];
+  const cartState: CartItem[] = [];
   const setCartMock = vi.fn();
+
+  const OrderRoute = Route.options.component;
+  if (!OrderRoute) {
+    throw new Error("order route has no component");
+  }
 
   // 2. Render Order component yang dibungkus dengan CartContext
   const screen = render(
     <CartContext.Provider value={[cartState, setCartMock]}>
-      <Route.options.component />
+      <OrderRoute />
     </CartContext.Provider>
   );
 
@@ -57,10 +62,14 @@ test("renders pizza options and adds a pizza to cart", async () => {
   expect(setCartMock).toHaveBeenCalledTimes(1);
   expect(setCartMock).toHaveBeenCalledWith([
     {
-      pizza: expect.objectContaining({
+      pizza: {
         id: "pepperoni",
         name: "The Pepperoni Pizza",
-      }),
+        category: "Classic",
+        description: "Mozzarella Cheese, Pepperoni",
+        image: "/public/pizzas/pepperoni.webp",
+        sizes: { S: 9.75, M: 12.5, L: 15.25 },
+      },
       size: "M",
       price: "$12.50",
     },
