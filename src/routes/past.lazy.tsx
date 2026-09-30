@@ -5,6 +5,10 @@ import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
+import type { PastOrder, PastOrderDetail } from "../APIResponsesTypes";
+
+
+
 
 export const Route = createLazyFileRoute("/past")({
   component: ErrorBoundaryWrappedPastOrderRoutes,
@@ -24,18 +28,18 @@ const intl = new Intl.NumberFormat("en-US", {
 });
 
 function PastOrdersRoute() {
-  const [focusedOrder, setFocusedOrder] = useState();
-  
-  const { isLoading: isLoadingPastOrder, data: pastOrderData } = useQuery({
-      queryKey: ["past-order", focusedOrder],
-      queryFn: () => getPastOrder(focusedOrder),
-      enabled: !!focusedOrder,
-      staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds
-    });
-    
-    const [page, setPage] = useState(1);
+  const [focusedOrder, setFocusedOrder] = useState<number>();
 
-    const { isLoading, data } = useQuery({
+  const { data: pastOrderData } = useQuery<PastOrderDetail>({
+    queryKey: ["past-order", focusedOrder],
+    queryFn: () => getPastOrder(focusedOrder),
+    enabled: !!focusedOrder,
+    staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds
+  });
+
+  const [page, setPage] = useState(1);
+
+  const { isLoading, data } = useQuery<PastOrder[]>({
     queryKey: ["past-orders", page],
     queryFn: () => getPastOrders(page),
     staleTime: 30000,
@@ -47,6 +51,10 @@ function PastOrdersRoute() {
         <h2>LOADING …</h2>
       </div>
     );
+  }
+
+  if (!data) {
+    throw new Error("Past orders could not be loaded");
   }
 
   return (
@@ -85,7 +93,7 @@ function PastOrdersRoute() {
       {focusedOrder ? (
         <Modal>
           <h2>Order #{focusedOrder}</h2>
-          {!isLoadingPastOrder ? (
+          {pastOrderData ? (
             <table>
               <thead>
                 <tr>
@@ -115,7 +123,7 @@ function PastOrdersRoute() {
           ) : (
             <p>Loading …</p>
           )}
-          <button onClick={() => setFocusedOrder()}>Close</button>
+          <button onClick={() => setFocusedOrder(undefined)}>Close</button>
         </Modal>
       ) : null}
     </div>
