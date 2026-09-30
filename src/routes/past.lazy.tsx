@@ -1,14 +1,10 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
-import type { PastOrder, PastOrderDetail } from "../APIResponsesTypes";
-
-
-
 
 export const Route = createLazyFileRoute("/past")({
   component: ErrorBoundaryWrappedPastOrderRoutes,
@@ -30,16 +26,15 @@ const intl = new Intl.NumberFormat("en-US", {
 function PastOrdersRoute() {
   const [focusedOrder, setFocusedOrder] = useState<number>();
 
-  const { data: pastOrderData } = useQuery<PastOrderDetail>({
+  const { data: pastOrderData } = useQuery({
     queryKey: ["past-order", focusedOrder],
-    queryFn: () => getPastOrder(focusedOrder),
-    enabled: !!focusedOrder,
+    queryFn: focusedOrder ? () => getPastOrder(focusedOrder) : skipToken,
     staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds
   });
 
   const [page, setPage] = useState(1);
 
-  const { isLoading, data } = useQuery<PastOrder[]>({
+  const { isLoading, data } = useQuery({
     queryKey: ["past-orders", page],
     queryFn: () => getPastOrders(page),
     staleTime: 30000,
