@@ -3,11 +3,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import Order from "./Order";
-// import PizzaOfTheDay from "./PizzaOfTheDay";
-// import Header from "./Header";
-// import { CartContext } from "./contexts";
-
+import "./index.css";
 
 const router = createRouter({ routeTree });
 declare module "@tanstack/react-router" {
