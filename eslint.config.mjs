@@ -5,8 +5,10 @@ import prettier from "eslint-config-prettier";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 import reactPlugin from "eslint-plugin-react";
 
-/** @type {import('eslint').Linter.Config[]} */
 export default [
+  {
+    ignores: ["dist/**", "coverage/**", "node_modules/**"],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
