@@ -11,6 +11,9 @@ const intl = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 })
 
+const sizeLabelClass =
+  "mx-3.75 mb-2.5 inline-flex h-20 w-20 cursor-pointer items-center justify-center rounded-[5px] border border-[#999] bg-border text-[#999] peer-checked:bg-white peer-checked:text-[#333] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary";
+
 export const Route = createLazyFileRoute('/order')({
   component: Order,
 })
@@ -60,88 +63,116 @@ if (!loading) {
   }
 
   return (
-    <div className="order">
-      <h2>Create Order</h2>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!selectedPizza || !price) {
-            return;
-          }
-          setCart([
-            ...cart,
-            { pizza: selectedPizza, size: pizzaSize, price },
-          ]);
-        }}
-      >
-        <div>
-          <div>
-            <label htmlFor="pizza-type">Pizza Type</label>
-            <select
-              onChange={(e) => setPizzaType(e.target.value)}
-              name="pizza-type"
-              value={pizzaType}
-            >
-              {pizzaTypes.map((pizza) => (
-                <option key={pizza.id} value={pizza.id}>
-                  {pizza.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="pizza-size">Pizza Size</label>
-            <div>
-              <span>
-                <input
-                  onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
-                  checked={pizzaSize === "S"}
-                  type="radio"
-                  name="pizza-size"
-                  value="S"
-                  id="pizza-s"
-                />
-                <label htmlFor="pizza-s">Small</label>
-              </span>
-              <span>
-                <input
-                  checked={pizzaSize === 'M'}
-                  type="radio"
-                  name="pizza-size"
-                  value="M"
-                  id="pizza-m"
-                  onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
-                />
-                <label htmlFor="pizza-m">Medium</label>
-              </span>
-              <span>
-                <input
-                  checked={pizzaSize === 'L'}
-                  type="radio"
-                  name="pizza-size"
-                  value="L"
-                  id="pizza-l"
-                  onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
-                />
-                <label htmlFor="pizza-l">Large</label>
-              </span>
+    <div className="order-page">
+      <div className="order">
+        <h2>Create Order</h2>
+        <form
+          className="flex justify-between"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!selectedPizza || !price) {
+              return;
+            }
+            setCart([
+              ...cart,
+              { pizza: selectedPizza, size: pizzaSize, price },
+            ]);
+          }}
+        >
+          <div className="my-2.5 w-full border-r border-border p-3.75 text-center">
+            <div className="my-2.5 text-center">
+              <label
+                htmlFor="pizza-type"
+                className="mb-2.5 block text-[20px] text-secondary"
+              >
+                Pizza Type
+              </label>
+              <select
+                className="form-select mb-7.5 block w-full py-1.25 pl-1.25 text-[16px]"
+                onChange={(e) => setPizzaType(e.target.value)}
+                name="pizza-type"
+                value={pizzaType}
+              >
+                {pizzaTypes.map((pizza) => (
+                  <option key={pizza.id} value={pizza.id}>
+                    {pizza.name}
+                  </option>
+                ))}
+              </select>
             </div>
+            <div className="my-2.5 text-center">
+              <label
+                htmlFor="pizza-size"
+                className="mb-2.5 block text-[20px] text-secondary"
+              >
+                Pizza Size
+              </label>
+              <div className="my-2.5 text-center">
+                <span>
+                  <input
+                    onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+                    checked={pizzaSize === "S"}
+                    className="peer sr-only"
+                    type="radio"
+                    name="pizza-size"
+                    value="S"
+                    id="pizza-s"
+                  />
+                  <label htmlFor="pizza-s" className={sizeLabelClass}>
+                    Small
+                  </label>
+                </span>
+                <span>
+                  <input
+                    checked={pizzaSize === 'M'}
+                    className="peer sr-only"
+                    type="radio"
+                    name="pizza-size"
+                    value="M"
+                    id="pizza-m"
+                    onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+                  />
+                  <label htmlFor="pizza-m" className={sizeLabelClass}>
+                    Medium
+                  </label>
+                </span>
+                <span>
+                  <input
+                    checked={pizzaSize === 'L'}
+                    className="peer sr-only"
+                    type="radio"
+                    name="pizza-size"
+                    value="L"
+                    id="pizza-l"
+                    onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+                  />
+                  <label htmlFor="pizza-l" className={sizeLabelClass}>
+                    Large
+                  </label>
+                </span>
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:opacity-50"
+            >
+              Add to Cart
+            </button>
           </div>
-          <button type="submit">Add to Cart</button>
-        </div>
-        {loading || !selectedPizza ? (
-          <h3>LOADING …</h3>
-        ) : (
-          <div className="order-pizza">
-            <Pizza
-              name={selectedPizza.name}
-              description={selectedPizza.description}
-              image={selectedPizza.image}
-            />
-            <p>{price}</p>
-          </div>
-        )}
-      </form>
+          {loading || !selectedPizza ? (
+            <h3>LOADING …</h3>
+          ) : (
+            <div className="my-2.5 ml-6.25 w-full p-3.75 text-center">
+              <Pizza
+                name={selectedPizza.name}
+                description={selectedPizza.description}
+                image={selectedPizza.image}
+              />
+              <p>{price}</p>
+            </div>
+          )}
+        </form>
+      </div>
 
       {loading ? <h2>LOADING …</h2> : <Cart checkout={() => void checkout()} cart={cart} />}
     </div>
