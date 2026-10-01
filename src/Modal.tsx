@@ -22,11 +22,11 @@ import type { ReactNode } from "react";
   }, []);
 
   return createPortal(
-    <div className="rounded-[30px] bg-background p-3.75 text-center">
-      {children}
-    </div>,
-    elRef.current,
-  );
-};
+  <div className="rounded-[30px] bg-background p-3.75 text-center">
+    {children}
+  </div>,
+  elRef.current,
+);
+  };
 
 export default Modal;
