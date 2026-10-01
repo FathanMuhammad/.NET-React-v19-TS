@@ -25,24 +25,24 @@ function Order() {
   const [cart, setCart] = useContext(CartContext)
   const [loading, setLoading] = useState(true)
 
-let price: string | undefined;
-let selectedPizza: PizzaType | undefined;
-if (!loading) {
-  selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
-  price = selectedPizza
-    ? intl.format(selectedPizza.sizes[pizzaSize])
-    : undefined;
-}
+  let price: string | undefined;
+  let selectedPizza: PizzaType | undefined;
+  if (!loading) {
+    selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
+    price = selectedPizza
+      ? intl.format(selectedPizza.sizes[pizzaSize])
+      : undefined;
+  }
 
   useEffect(() => {
     void fetchPizzaTypes();
   }, []);
 
   async function fetchPizzaTypes() {
-  const pizzasRes = await fetch("/api/pizzas");
-  const pizzasJson = (await pizzasRes.json()) as PizzaType[];
-  setPizzaTypes(pizzasJson);
-  setLoading(false);
+    const pizzasRes = await fetch("/api/pizzas");
+    const pizzasJson = (await pizzasRes.json()) as PizzaType[];
+    setPizzaTypes(pizzasJson);
+    setLoading(false);
   }
 
   async function checkout() {

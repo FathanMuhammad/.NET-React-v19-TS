@@ -30,13 +30,36 @@ function ContactRoute() {
     <div className="contact">
       <h2>Contact</h2>
       {mutation.isSuccess ? (
-        <h3>Submitted!</h3>
+        <h3 className="m-12.5 text-center font-pacifico text-[30px] font-normal text-secondary">
+          Submitted!
+        </h3>
       ) : (
-        <form onSubmit={mutation.mutate}>
-          <input name="name" placeholder="Name" />
-          <input type="email" name="email" placeholder="Email" />
-          <textarea placeholder="Message" name="message"></textarea>
-          <button>Submit</button>
+        <form
+          onSubmit={mutation.mutate}
+          className="flex flex-col items-center"
+        >
+          <input
+            name="name"
+            placeholder="Name"
+            className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
+          />
+          <textarea
+            placeholder="Message"
+            name="message"
+            className="my-3.75 min-h-50 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
+          ></textarea>
+          <button
+            type="submit"
+            className="inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:opacity-50"
+          >
+            Submit
+          </button>
         </form>
       )}
     </div>
