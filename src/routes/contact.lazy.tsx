@@ -41,18 +41,18 @@ function ContactRoute() {
           <input
             name="name"
             placeholder="Name"
-            className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
+            className="my-3.75 w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
           />
           <input
             type="email"
             name="email"
             placeholder="Email"
-            className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
+            className="my-3.75 w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
           />
           <textarea
             placeholder="Message"
             name="message"
-            className="my-3.75 min-h-50 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
+            className="my-3.75 min-h-50 w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary focus:outline-none disabled:bg-[#999]"
           ></textarea>
           <button
             type="submit"

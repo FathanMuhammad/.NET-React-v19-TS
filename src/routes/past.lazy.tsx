@@ -42,7 +42,7 @@ function PastOrdersRoute() {
 
   if (isLoading) {
     return (
-      <div className="past-orders">
+      <div className="mx-auto min-h-162.5 w-[90%] max-w-225">
         <h2>LOADING …</h2>
       </div>
     );
@@ -53,35 +53,49 @@ function PastOrdersRoute() {
   }
 
   return (
-    <div className="past-orders">
-      <table>
+    <div className="mx-auto min-h-162.5 w-[90%] max-w-225">
+      <table className="my-6.25 w-full min-w-100 border-collapse border border-[#ddd] font-sans text-[0.9em]">
         <thead>
-          <tr>
-            <td>ID</td>
-            <td>Date</td>
-            <td>Time</td>
+          <tr className="bg-secondary text-left text-white">
+            <th className="px-3.75 py-3 text-center">ID</th>
+            <th className="px-3.75 py-3 text-center">Date</th>
+            <th className="px-3.75 py-3 text-center">Time</th>
           </tr>
         </thead>
         <tbody>
           {data.map((order) => (
-            <tr key={order.order_id}>
-              <td>
-                <button onClick={() => setFocusedOrder(order.order_id)}>
+            <tr
+              key={order.order_id}
+              className="border-b border-[#ddd] even:bg-[#f6fef0] last:border-b-2 last:border-b-secondary"
+            >
+              <td className="px-3.75 py-3 text-center">
+                <button
+                  className="btn"
+                  onClick={() => setFocusedOrder(order.order_id)}
+                >
                   {order.order_id}
                 </button>
               </td>
-              <td>{order.date}</td>
-              <td>{order.time}</td>
+              <td className="px-3.75 py-3 text-center">{order.date}</td>
+              <td className="px-3.75 py-3 text-center">{order.time}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="pages">
-        <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
+      <div className="flex items-center justify-evenly">
+        <button
+          className="btn"
+          disabled={page <= 1}
+          onClick={() => setPage(page - 1)}
+        >
           Previous
         </button>
-        <div>{page}</div>
-        <button disabled={data.length < 10} onClick={() => setPage(page + 1)}>
+        <div className="font-pacifico text-[20px] text-primary">{page}</div>
+        <button
+          className="btn"
+          disabled={data.length < 10}
+          onClick={() => setPage(page + 1)}
+        >
           Next
         </button>
       </div>
@@ -89,28 +103,41 @@ function PastOrdersRoute() {
         <Modal>
           <h2>Order #{focusedOrder}</h2>
           {pastOrderData ? (
-            <table>
+            <table className="my-6.25 w-full min-w-100 border-collapse border border-[#ddd] font-sans text-[0.9em]">
               <thead>
-                <tr>
-                  <td>Image</td>
-                  <td>Name</td>
-                  <td>Size</td>
-                  <td>Quantity</td>
-                  <td>Price</td>
-                  <td>Total</td>
+                <tr className="bg-secondary text-left text-white">
+                  <th className="px-3.75 py-3 text-center">Image</th>
+                  <th className="px-3.75 py-3 text-center">Name</th>
+                  <th className="px-3.75 py-3 text-center">Size</th>
+                  <th className="px-3.75 py-3 text-center">Quantity</th>
+                  <th className="px-3.75 py-3 text-center">Price</th>
+                  <th className="px-3.75 py-3 text-center">Total</th>
                 </tr>
               </thead>
               <tbody>
                 {pastOrderData.orderItems.map((pizza) => (
-                  <tr key={`${pizza.pizzaTypeId}_${pizza.size}`}>
-                    <td>
-                      <img src={pizza.image} alt={pizza.name} />
+                  <tr
+                    key={`${pizza.pizzaTypeId}_${pizza.size}`}
+                    className="border-b border-[#ddd] even:bg-[#f6fef0] last:border-b-2 last:border-b-secondary"
+                  >
+                    <td className="px-3.75 py-3 text-center">
+                      <img
+                        className="inline-block w-12.5"
+                        src={pizza.image}
+                        alt={pizza.name}
+                      />
                     </td>
-                    <td>{pizza.name}</td>
-                    <td>{pizza.size}</td>
-                    <td>{pizza.quantity}</td>
-                    <td>{intl.format(pizza.price)}</td>
-                    <td>{intl.format(pizza.total)}</td>
+                    <td className="px-3.75 py-3 text-center">{pizza.name}</td>
+                    <td className="px-3.75 py-3 text-center">{pizza.size}</td>
+                    <td className="px-3.75 py-3 text-center">
+                      {pizza.quantity}
+                    </td>
+                    <td className="px-3.75 py-3 text-center">
+                      {intl.format(pizza.price)}
+                    </td>
+                    <td className="px-3.75 py-3 text-center">
+                      {intl.format(pizza.total)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -118,7 +145,9 @@ function PastOrdersRoute() {
           ) : (
             <p>Loading …</p>
           )}
-          <button onClick={() => setFocusedOrder(undefined)}>Close</button>
+          <button className="btn" onClick={() => setFocusedOrder(undefined)}>
+            Close
+          </button>
         </Modal>
       ) : null}
     </div>

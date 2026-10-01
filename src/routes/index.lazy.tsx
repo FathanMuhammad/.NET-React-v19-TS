@@ -6,20 +6,30 @@ export const Route = createLazyFileRoute("/")({
 
 function Index() {
   return (
-    <div className="index">
-      <div className="index-brand">
-        <h1>Padre Gino's</h1>
-        <p>Pizza & Art at a location near you</p>
+    <div className="mx-auto my-30 grid max-w-175 grid-cols-1 gap-7.5 sm:grid-cols-2">
+      <div className="flex flex-col">
+        <h1 className="font-pacifico text-[40px] font-normal text-primary">
+          Padre Gino's
+        </h1>
+        <p className="max-w-[315px] font-bold text-[40px] uppercase text-secondary">
+          Pizza & Art at a location near you
+        </p>
       </div>
-      <ul>
-        <li>
-          <Link to="/order">Order</Link>
+      <ul className="flex flex-col items-center justify-center">
+        <li className="w-full max-w-62.5 text-center">
+          <Link className="btn mb-2.5 w-full" to="/order">
+            Order
+          </Link>
         </li>
-        <li>
-          <Link to="/past">Past Orders</Link>
+        <li className="w-full max-w-62.5 text-center">
+          <Link className="btn mb-2.5 w-full" to="/past">
+            Past Orders
+          </Link>
         </li>
-        <li>
-          <Link to="/contact">Contact</Link>
+        <li className="w-full max-w-62.5 text-center">
+          <Link className="btn mb-2.5 w-full" to="/contact">
+            Contact
+          </Link>
         </li>
       </ul>
     </div>
