@@ -1,0 +1,17 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { Pizza } from "../APIResponsesTypes";
+
+export const pizzaApi = createApi({
+  reducerPath: "pizzaApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+  endpoints: (build) => ({
+    getPizzas: build.query<Pizza[], void>({
+      query: () => "pizzas",
+    }),
+    getPizzaOfTheDay: build.query<Pizza, void>({
+      query: () => "pizza-of-the-day",
+    }),
+  }),
+});
+
+export const { useGetPizzasQuery, useGetPizzaOfTheDayQuery } = pizzaApi;
