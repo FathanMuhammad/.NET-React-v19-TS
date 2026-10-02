@@ -1,29 +1,31 @@
-import { useEffect, useState, useContext } from 'react';
-import Cart from '../Cart';
+import { useEffect, useState } from "react";
+import Cart from "../Cart";
 import Pizza from "../Pizza";
-import { CartContext } from '../contexts';
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from "@tanstack/react-router";
 import type { Pizza as PizzaType, PizzaSize } from "../APIResponsesTypes";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { addToCart, clearCart, selectCartItems } from "../cartSlice";
 
-
-const intl = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-})
+const intl = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
 
 const sizeLabelClass =
   "mx-3.75 mb-2.5 inline-flex h-20 w-20 cursor-pointer items-center justify-center rounded-[5px] border border-[#999] bg-border text-[#999] peer-checked:bg-white peer-checked:text-[#333] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary";
 
-export const Route = createLazyFileRoute('/order')({
+export const Route = createLazyFileRoute("/order")({
   component: Order,
-})
+});
 
 function Order() {
   const [pizzaTypes, setPizzaTypes] = useState<PizzaType[]>([]);
-  const [pizzaType, setPizzaType] = useState('pepperoni')
+  const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
-  const [cart, setCart] = useContext(CartContext)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+
+  const cart = useAppSelector(selectCartItems);
+  const dispatch = useAppDispatch();
 
   let price: string | undefined;
   let selectedPizza: PizzaType | undefined;
@@ -46,41 +48,44 @@ function Order() {
   }
 
   async function checkout() {
-    setLoading(true)
+    setLoading(true);
 
-    await fetch('/api/order', {
-      method: 'POST',
+    await fetch("/api/order", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         cart,
       }),
-    })
+    });
 
-    setCart([])
-    setLoading(false)
+    dispatch(clearCart());
+    setLoading(false);
   }
 
   return (
     <div className="mx-auto grid max-w-325 grid-cols-1 gap-12.5 lg:grid-cols-[2fr_1fr]">
-    <div className="w-full lg:ml-[5%]">
-      <h2>Create Order</h2>
+      <div className="w-full lg:ml-[5%]">
+        <h2>Create Order</h2>
         <form
-        className="flex flex-col md:flex-row md:justify-between"
-        onSubmit={(e) => {
+          className="flex flex-col md:flex-row md:justify-between"
+          onSubmit={(e) => {
             e.preventDefault();
             if (!selectedPizza || !price) {
               return;
             }
-            setCart([
-              ...cart,
-              { pizza: selectedPizza, size: pizzaSize, price },
-            ]);
+            dispatch(
+              addToCart({
+                pizza: selectedPizza,
+                size: pizzaSize,
+                price,
+              })
+            );
           }}
         >
-            <div className="my-2.5 w-full border-b border-border p-3.75 text-center md:border-r md:border-b-0">
-            <div className="my-2.5 text-center m-4">
+          <div className="my-2.5 w-full border-b border-border p-3.75 text-center md:border-r md:border-b-0">
+            <div className="m-4 my-2.5 text-center">
               <label
                 htmlFor="pizza-type"
                 className="mb-2.5 block text-[20px] text-secondary"
@@ -124,7 +129,7 @@ function Order() {
                 </span>
                 <span>
                   <input
-                    checked={pizzaSize === 'M'}
+                    checked={pizzaSize === "M"}
                     className="peer sr-only"
                     type="radio"
                     name="pizza-size"
@@ -138,7 +143,7 @@ function Order() {
                 </span>
                 <span>
                   <input
-                    checked={pizzaSize === 'L'}
+                    checked={pizzaSize === "L"}
                     className="peer sr-only"
                     type="radio"
                     name="pizza-size"
@@ -152,17 +157,14 @@ function Order() {
                 </span>
               </div>
             </div>
-            <button
-              type="submit"
-                className="btn"
-              >
+            <button type="submit" className="btn">
               Add to Cart
             </button>
           </div>
           {loading || !selectedPizza ? (
             <h3>LOADING …</h3>
           ) : (
-            <div className="my-2.5 ml w-full p-3.75 text-center md:ml-6.25">
+            <div className="ml my-2.5 w-full p-3.75 text-center md:ml-6.25">
               <Pizza
                 name={selectedPizza.name}
                 description={selectedPizza.description}
@@ -174,7 +176,11 @@ function Order() {
         </form>
       </div>
 
-      {loading ? <h2>LOADING …</h2> : <Cart checkout={() => void checkout()} cart={cart} />}
+      {loading ? (
+        <h2>LOADING …</h2>
+      ) : (
+        <Cart checkout={() => void checkout()} cart={cart} />
+      )}
     </div>
-  )
+  );
 }

@@ -6,15 +6,17 @@ import {
   createRouter,
   createRootRoute,
 } from "@tanstack/react-router";
-import { CartContext, type CartItem } from "../contexts";
+import { Provider } from "react-redux";
+import { makeStore } from "../store";
+import type { CartItem } from "../cartSlice";
 import type { Pizza } from "../APIResponsesTypes";
 
 test("correctly renders a header with a zero cart count", async () => {
   const rootRoute = createRootRoute({
     component: () => (
-      <CartContext.Provider value={[[], () => { }]}>
+      <Provider store={makeStore()}>
         <Header />
-      </CartContext.Provider>
+      </Provider>
     ),
   });
 
@@ -27,7 +29,6 @@ test("correctly renders a header with a zero cart count", async () => {
 });
 
 test("correctly renders a header with a three cart count", async () => {
-  // 1. Definisikan objek Pizza yang valid dan lengkap
   const testPizza: Pizza = {
     id: "pepperoni",
     name: "The Pepperoni Pizza",
@@ -37,7 +38,6 @@ test("correctly renders a header with a three cart count", async () => {
     sizes: { S: 9.75, M: 12.5, L: 15.25 },
   };
 
-  // 2. Buat array CartItem[] yang strukturnya sesuai tipe CartContext
   const threeItems: CartItem[] = [
     { pizza: testPizza, size: "S", price: "$9.75" },
     { pizza: testPizza, size: "M", price: "$12.50" },
@@ -46,9 +46,9 @@ test("correctly renders a header with a three cart count", async () => {
 
   const rootRoute = createRootRoute({
     component: () => (
-      <CartContext.Provider value={[threeItems, () => { }]}>
+      <Provider store={makeStore({ cart: { items: threeItems } })}>
         <Header />
-      </CartContext.Provider>
+      </Provider>
     ),
   });
 

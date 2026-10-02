@@ -1,4 +1,4 @@
-import type { CartItem } from "./contexts";
+import type { CartItem } from "./cartSlice";
 
 const intl = new Intl.NumberFormat("en-US", {
   style: "currency",
