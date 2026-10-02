@@ -53,7 +53,7 @@ function PastOrdersRoute() {
   }
 
   return (
-    <div className="mx-auto min-h-162.5 w-[90%] max-w-225">
+    <div className="mx-auto min-h-162.5 w-[100%] p-5 max-w-255">
       <table className="my-6.25 w-full min-w-100 border-collapse border border-[#ddd] font-sans text-[0.9em]">
         <thead>
           <tr className="bg-secondary text-left text-white">

@@ -80,7 +80,7 @@ function Order() {
           }}
         >
             <div className="my-2.5 w-full border-b border-border p-3.75 text-center md:border-r md:border-b-0">
-            <div className="my-2.5 text-center">
+            <div className="my-2.5 text-center m-4">
               <label
                 htmlFor="pizza-type"
                 className="mb-2.5 block text-[20px] text-secondary"
@@ -162,7 +162,7 @@ function Order() {
           {loading || !selectedPizza ? (
             <h3>LOADING …</h3>
           ) : (
-            <div className="my-2.5 ml-6.25 w-full p-3.75 text-center md:ml-6.25">
+            <div className="my-2.5 ml w-full p-3.75 text-center md:ml-6.25">
               <Pizza
                 name={selectedPizza.name}
                 description={selectedPizza.description}

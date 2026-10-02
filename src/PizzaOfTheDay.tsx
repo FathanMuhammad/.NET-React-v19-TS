@@ -16,7 +16,7 @@ const PizzaOfTheDay = () => {
   return (
     <div className="mt-12.5 w-full border-t border-border">
       <h2 className="text-center">Pizza of the Day</h2>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center m-5">
         <div className="mr-7.5 text-center leading-loose">
           <h3>{pizzaOfTheDay.name}</h3>
           <p>{pizzaOfTheDay.description}</p>
