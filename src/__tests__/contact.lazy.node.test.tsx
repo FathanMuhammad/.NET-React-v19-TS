@@ -1,10 +1,9 @@
 import { render } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { Provider } from "react-redux";
+import { makeStore } from "../store";
 import { Route } from "../routes/contact.lazy";
-
-const queryClient = new QueryClient();
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -17,9 +16,9 @@ test("can submit contact form", async () => {
   }
 
   const screen = render(
-    <QueryClientProvider client={queryClient}>
+    <Provider store={makeStore()}>
       <ContactRoute />
-    </QueryClientProvider>
+    </Provider>
   );
 
   const nameInput = screen.getByPlaceholderText("Name") as HTMLInputElement;
@@ -47,11 +46,7 @@ test("can submit contact form", async () => {
   const requests = fetchMocker.requests();
   expect(requests.length).toBe(1);
   expect(requests[0].url).toBe("/api/contact");
-  expect(fetchMocker).toHaveBeenCalledWith("/api/contact", {
-    body: JSON.stringify(testData),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
+  expect(requests[0].method).toBe("POST");
+  expect(requests[0].headers.get("Content-Type")).toBe("application/json");
+  expect(await requests[0].json()).toEqual(testData);
 });
