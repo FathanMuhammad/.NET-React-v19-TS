@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { skipToken, useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import getPastOrders from "../api/getPastOrders";
-import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
+import { skipToken } from "@reduxjs/toolkit/query/react";
+import { useGetPastOrdersQuery, useGetPastOrderQuery } from "../api/pizzaApi";
 
 export const Route = createLazyFileRoute("/past")({
   component: ErrorBoundaryWrappedPastOrderRoutes,
@@ -25,31 +24,27 @@ const intl = new Intl.NumberFormat("en-US", {
 
 function PastOrdersRoute() {
   const [focusedOrder, setFocusedOrder] = useState<number>();
-
-  const { data: pastOrderData } = useQuery({
-    queryKey: ["past-order", focusedOrder],
-    queryFn: focusedOrder ? () => getPastOrder(focusedOrder) : skipToken,
-    staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds
-  });
+  const { data: pastOrderData } = useGetPastOrderQuery(
+    focusedOrder ?? skipToken,
+  );
 
   const [page, setPage] = useState(1);
+  const {
+    isLoading,
+    isError,
+    currentData: data,
+  } = useGetPastOrdersQuery(page);
 
-  const { isLoading, data } = useQuery({
-    queryKey: ["past-orders", page],
-    queryFn: () => getPastOrders(page),
-    staleTime: 30000,
-  });
+  if (isError) {
+    throw new Error("Past orders could not be loaded");
+  }
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return (
       <div className="mx-auto min-h-162.5 w-[90%] max-w-225">
         <h2>LOADING …</h2>
       </div>
     );
-  }
-
-  if (!data) {
-    throw new Error("Past orders could not be loaded");
   }
 
   return (
