@@ -1,4 +1,4 @@
-import { useGetPizzaOfTheDayQuery } from "./api/pizzaApi";
+import { usePizzaOfTheDay } from "./usePizzaOfTheDay";
 
 // feel free to change en-US / USD to your locale
 const intl = new Intl.NumberFormat("en-US", {
@@ -7,9 +7,9 @@ const intl = new Intl.NumberFormat("en-US", {
 });
 
 const PizzaOfTheDay = () => {
-  const { data: pizzaOfTheDay, isLoading } = useGetPizzaOfTheDayQuery();
+  const pizzaOfTheDay = usePizzaOfTheDay();
 
-  if (isLoading || !pizzaOfTheDay) {
+  if (!pizzaOfTheDay) {
     return <div>Loading...</div>;
   }
 
